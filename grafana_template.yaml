@@ -1,0 +1,161 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    labels:
+      app: mark-walle-grafana
+    name: mark-walle-grafana
+    namespace: s4g19x-mark-walle-openshift201-may2019-dev
+  spec:
+    clusterIP: 172.50.197.54
+    ports:
+    - name: 3000-tcp
+      port: 3000
+      protocol: TCP
+      targetPort: 3000
+    selector:
+      app: mark-walle-grafana
+      deploymentconfig: mark-walle-grafana
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    generation: 8
+    labels:
+      app: mark-walle-grafana
+    name: mark-walle-grafana
+    namespace: s4g19x-mark-walle-openshift201-may2019-dev
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      app: mark-walle-grafana
+      deploymentconfig: mark-walle-grafana
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: mark-walle-grafana
+          deploymentconfig: mark-walle-grafana
+      spec:
+        containers:
+        - image: grafana/grafana@sha256:ced97851c89ca7d1e67a43aabbe05452e144a9bc9ffc63d2220dc2f37fdc1a71
+          imagePullPolicy: IfNotPresent
+          name: mark-walle-grafana
+          ports:
+          - containerPort: 3000
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /etc/grafana/provisioning/dashboards
+            name: volume-oug67
+          - mountPath: /etc/grafana/provisioning/datasources/
+            name: volume-dgx1r
+          - mountPath: /var/lib/grafana/dashboards/
+            name: volume-lo8ch
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - configMap:
+            defaultMode: 420
+            name: markwalle-grafana-dashboard-providers
+          name: volume-oug67
+        - configMap:
+            defaultMode: 420
+            name: markwalle-grafana-datasources
+          name: volume-dgx1r
+        - configMap:
+            defaultMode: 420
+            name: markwalle-grafana-simple-dashboard
+          name: volume-lo8ch
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - mark-walle-grafana
+        from:
+          kind: ImageStreamTag
+          name: mark-walle-grafana:6.2.0
+          namespace: s4g19x-mark-walle-openshift201-may2019-dev
+        lastTriggeredImage: grafana/grafana@sha256:ced97851c89ca7d1e67a43aabbe05452e144a9bc9ffc63d2220dc2f37fdc1a71
+      type: ImageChange
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+      openshift.io/image.dockerRepositoryCheck: 2019-05-27T19:23:32Z
+    generation: 2
+    labels:
+      app: mark-walle-grafana
+    name: mark-walle-grafana
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations:
+        openshift.io/imported-from: grafana/grafana:6.2.0
+      from:
+        kind: DockerImage
+        name: grafana/grafana:6.2.0
+      generation: 2
+      importPolicy: {}
+      name: 6.2.0
+      referencePolicy:
+        type: Source
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    annotations:
+      openshift.io/host.generated: "true"
+    labels:
+      app: mark-walle-grafana
+    name: mark-walle-grafana
+    namespace: s4g19x-mark-walle-openshift201-may2019-dev
+  spec:
+    host: mark-walle-grafana-s4g19x-mark-walle-openshift201-may2019-dev.pathfinder.gov.bc.ca
+    port:
+      targetPort: 3000-tcp
+    to:
+      kind: Service
+      name: mark-walle-grafana
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: 2019-05-27T21:14:55Z
+        status: "True"
+        type: Admitted
+      host: mark-walle-grafana-s4g19x-mark-walle-openshift201-may2019-dev.pathfinder.gov.bc.ca
+      routerName: router
+      wildcardPolicy: None
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""
