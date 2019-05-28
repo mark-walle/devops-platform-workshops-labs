@@ -1,0 +1,529 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      checksum/config: 110baa76614f67dfb53da8f999a3854b252a21c1824de76f26c186f7d97c5b5d
+      kubernetes.io/limit-ranger: 'LimitRanger plugin set: cpu, memory request for
+        container loki; cpu, memory limit for container loki'
+      openshift.io/scc: restricted
+      prometheus.io/port: http-metrics
+      prometheus.io/scrape: "true"
+    creationTimestamp: 2019-05-27T19:17:24Z
+    generateName: markwalle-loki-86989d5bdf-
+    labels:
+      app: loki
+      name: loki
+      pod-template-hash: "4254581689"
+      release: markwalle-loki
+    name: markwalle-loki-86989d5bdf-89nwz
+    namespace: s4g19x-mark-walle-openshift201-may2019-dev
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: markwalle-loki-86989d5bdf
+      uid: 0ea256b8-80b4-11e9-8dc7-0050568348cc
+    resourceVersion: "795121152"
+    selfLink: /api/v1/namespaces/s4g19x-mark-walle-openshift201-may2019-dev/pods/markwalle-loki-86989d5bdf-89nwz
+    uid: 0eb88b7b-80b4-11e9-8dc7-0050568348cc
+  spec:
+    affinity: {}
+    containers:
+    - args:
+      - -config.file=/etc/loki/loki.yaml
+      env:
+      - name: JAEGER_AGENT_HOST
+      image: grafana/loki:latest
+      imagePullPolicy: Always
+      livenessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /ready
+          port: http-metrics
+          scheme: HTTP
+        initialDelaySeconds: 45
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+      name: loki
+      ports:
+      - containerPort: 3100
+        name: http-metrics
+        protocol: TCP
+      readinessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /ready
+          port: http-metrics
+          scheme: HTTP
+        initialDelaySeconds: 45
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+      resources:
+        limits:
+          cpu: 250m
+          memory: 1Gi
+        requests:
+          cpu: 100m
+          memory: 256Mi
+      securityContext:
+        capabilities:
+          drop:
+          - KILL
+          - MKNOD
+          - SETGID
+          - SETUID
+        readOnlyRootFilesystem: true
+        runAsUser: 1007330000
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /etc/loki
+        name: config
+      - mountPath: /data
+        name: storage
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: default-token-tvw7w
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    imagePullSecrets:
+    - name: default-dockercfg-p775t
+    nodeName: ociopf-p-187.dmz
+    nodeSelector:
+      region: app
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext:
+      fsGroup: 1007330000
+      seLinuxOptions:
+        level: s0:c86,c10
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoSchedule
+      key: node.kubernetes.io/memory-pressure
+      operator: Exists
+    volumes:
+    - name: config
+      secret:
+        defaultMode: 420
+        secretName: markwalle-loki
+    - emptyDir: {}
+      name: storage
+    - name: default-token-tvw7w
+      secret:
+        defaultMode: 420
+        secretName: default-token-tvw7w
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: 2019-05-27T19:17:24Z
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: 2019-05-27T19:18:41Z
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: null
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: 2019-05-27T19:17:24Z
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://b822a8a6d363c47fce7b87ae472acf11044e131469b05f02b7abb33f42090a0a
+      image: docker.io/grafana/loki:latest
+      imageID: docker-pullable://docker.io/grafana/loki@sha256:8ef3479c3f792c0534d6399ebb34280d1d809ccfeec3c47d9502a1f5b65d4991
+      lastState: {}
+      name: loki
+      ready: true
+      restartCount: 0
+      state:
+        running:
+          startedAt: 2019-05-27T19:17:33Z
+    hostIP: 142.34.143.173
+    phase: Running
+    podIP: 172.51.77.119
+    qosClass: Burstable
+    startTime: 2019-05-27T19:17:24Z
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"loki","chart":"loki-0.8.4","heritage":"Tiller","release":"markwalle-loki"},"name":"markwalle-loki","namespace":"s4g19x-mark-walle-openshift201-may2019-dev"},"spec":{"ports":[{"name":"http-metrics","port":3100,"protocol":"TCP","targetPort":"http-metrics"}],"selector":{"app":"loki","release":"markwalle-loki"},"type":"ClusterIP"}}
+    creationTimestamp: 2019-05-27T19:15:19Z
+    labels:
+      app: loki
+      chart: loki-0.8.4
+      heritage: Tiller
+      release: markwalle-loki
+    name: markwalle-loki
+    namespace: s4g19x-mark-walle-openshift201-may2019-dev
+    resourceVersion: "795117490"
+    selfLink: /api/v1/namespaces/s4g19x-mark-walle-openshift201-may2019-dev/services/markwalle-loki
+    uid: c438a335-80b3-11e9-8dc7-0050568348cc
+  spec:
+    clusterIP: 172.50.248.232
+    ports:
+    - name: http-metrics
+      port: 3100
+      protocol: TCP
+      targetPort: http-metrics
+    selector:
+      app: loki
+      release: markwalle-loki
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "2"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"loki","chart":"loki-0.8.4","heritage":"Tiller","release":"markwalle-loki"},"name":"markwalle-loki","namespace":"s4g19x-mark-walle-openshift201-may2019-dev"},"spec":{"minReadySeconds":0,"replicas":1,"selector":{"matchLabels":{"app":"loki","release":"markwalle-loki"}},"strategy":{"type":"RollingUpdate"},"template":{"metadata":{"annotations":{"checksum/config":"110baa76614f67dfb53da8f999a3854b252a21c1824de76f26c186f7d97c5b5d","prometheus.io/port":"http-metrics","prometheus.io/scrape":"true"},"labels":{"app":"loki","name":"loki","release":"markwalle-loki"}},"spec":{"affinity":{},"containers":[{"args":["-config.file=/etc/loki/loki.yaml"],"env":[{"name":"JAEGER_AGENT_HOST","value":""}],"image":"grafana/loki:latest","imagePullPolicy":"Always","livenessProbe":{"httpGet":{"path":"/ready","port":"http-metrics"},"initialDelaySeconds":45},"name":"loki","ports":[{"containerPort":3100,"name":"http-metrics","protocol":"TCP"}],"readinessProbe":{"httpGet":{"path":"/ready","port":"http-metrics"},"initialDelaySeconds":45},"resources":{},"securityContext":{"readOnlyRootFilesystem":true},"volumeMounts":[{"mountPath":"/etc/loki","name":"config"},{"mountPath":"/data","name":"storage","subPath":null}]}],"nodeSelector":{},"serviceAccountName":"default","terminationGracePeriodSeconds":30,"tolerations":[],"volumes":[{"name":"config","secret":{"secretName":"markwalle-loki"}},{"emptyDir":{},"name":"storage"}]}}}}
+    creationTimestamp: 2019-05-27T19:15:19Z
+    generation: 2
+    labels:
+      app: loki
+      chart: loki-0.8.4
+      heritage: Tiller
+      release: markwalle-loki
+    name: markwalle-loki
+    namespace: s4g19x-mark-walle-openshift201-may2019-dev
+    resourceVersion: "795121161"
+    selfLink: /apis/apps/v1/namespaces/s4g19x-mark-walle-openshift201-may2019-dev/deployments/markwalle-loki
+    uid: c45a1f6c-80b3-11e9-8dc7-0050568348cc
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: loki
+        release: markwalle-loki
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          checksum/config: 110baa76614f67dfb53da8f999a3854b252a21c1824de76f26c186f7d97c5b5d
+          prometheus.io/port: http-metrics
+          prometheus.io/scrape: "true"
+        creationTimestamp: null
+        labels:
+          app: loki
+          name: loki
+          release: markwalle-loki
+      spec:
+        affinity: {}
+        containers:
+        - args:
+          - -config.file=/etc/loki/loki.yaml
+          env:
+          - name: JAEGER_AGENT_HOST
+          image: grafana/loki:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ready
+              port: http-metrics
+              scheme: HTTP
+            initialDelaySeconds: 45
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: loki
+          ports:
+          - containerPort: 3100
+            name: http-metrics
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ready
+              port: http-metrics
+              scheme: HTTP
+            initialDelaySeconds: 45
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources: {}
+          securityContext:
+            readOnlyRootFilesystem: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /etc/loki
+            name: config
+          - mountPath: /data
+            name: storage
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: default
+        serviceAccountName: default
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: config
+          secret:
+            defaultMode: 420
+            secretName: markwalle-loki
+        - emptyDir: {}
+          name: storage
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: 2019-05-27T19:18:42Z
+      lastUpdateTime: 2019-05-27T19:18:42Z
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: 2019-05-27T19:15:19Z
+      lastUpdateTime: 2019-05-27T19:18:42Z
+      message: ReplicaSet "markwalle-loki-86989d5bdf" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 2
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: 2019-05-27T19:15:19Z
+    generation: 2
+    labels:
+      app: loki
+      name: loki
+      pod-template-hash: "401326726"
+      release: markwalle-loki
+    name: markwalle-loki-84576bc6b
+    namespace: s4g19x-mark-walle-openshift201-may2019-dev
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: markwalle-loki
+      uid: c45a1f6c-80b3-11e9-8dc7-0050568348cc
+    resourceVersion: "795121159"
+    selfLink: /apis/apps/v1/namespaces/s4g19x-mark-walle-openshift201-may2019-dev/replicasets/markwalle-loki-84576bc6b
+    uid: c466eea6-80b3-11e9-8dc7-0050568348cc
+  spec:
+    replicas: 0
+    selector:
+      matchLabels:
+        app: loki
+        pod-template-hash: "401326726"
+        release: markwalle-loki
+    template:
+      metadata:
+        annotations:
+          checksum/config: 110baa76614f67dfb53da8f999a3854b252a21c1824de76f26c186f7d97c5b5d
+          prometheus.io/port: http-metrics
+          prometheus.io/scrape: "true"
+        creationTimestamp: null
+        labels:
+          app: loki
+          name: loki
+          pod-template-hash: "401326726"
+          release: markwalle-loki
+      spec:
+        affinity: {}
+        containers:
+        - args:
+          - -config.file=/etc/loki/loki.yaml
+          env:
+          - name: JAEGER_AGENT_HOST
+          image: grafana/loki:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ready
+              port: http-metrics
+              scheme: HTTP
+            initialDelaySeconds: 45
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: loki
+          ports:
+          - containerPort: 3100
+            name: http-metrics
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ready
+              port: http-metrics
+              scheme: HTTP
+            initialDelaySeconds: 45
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources: {}
+          securityContext:
+            readOnlyRootFilesystem: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /etc/loki
+            name: config
+          - mountPath: /data
+            name: storage
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext:
+          fsGroup: 10001
+          runAsNonRoot: true
+          runAsUser: 10001
+        serviceAccount: default
+        serviceAccountName: default
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: config
+          secret:
+            defaultMode: 420
+            secretName: markwalle-loki
+        - emptyDir: {}
+          name: storage
+  status:
+    observedGeneration: 2
+    replicas: 0
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "2"
+    creationTimestamp: 2019-05-27T19:17:23Z
+    generation: 1
+    labels:
+      app: loki
+      name: loki
+      pod-template-hash: "4254581689"
+      release: markwalle-loki
+    name: markwalle-loki-86989d5bdf
+    namespace: s4g19x-mark-walle-openshift201-may2019-dev
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: markwalle-loki
+      uid: c45a1f6c-80b3-11e9-8dc7-0050568348cc
+    resourceVersion: "795121154"
+    selfLink: /apis/apps/v1/namespaces/s4g19x-mark-walle-openshift201-may2019-dev/replicasets/markwalle-loki-86989d5bdf
+    uid: 0ea256b8-80b4-11e9-8dc7-0050568348cc
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: loki
+        pod-template-hash: "4254581689"
+        release: markwalle-loki
+    template:
+      metadata:
+        annotations:
+          checksum/config: 110baa76614f67dfb53da8f999a3854b252a21c1824de76f26c186f7d97c5b5d
+          prometheus.io/port: http-metrics
+          prometheus.io/scrape: "true"
+        creationTimestamp: null
+        labels:
+          app: loki
+          name: loki
+          pod-template-hash: "4254581689"
+          release: markwalle-loki
+      spec:
+        affinity: {}
+        containers:
+        - args:
+          - -config.file=/etc/loki/loki.yaml
+          env:
+          - name: JAEGER_AGENT_HOST
+          image: grafana/loki:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ready
+              port: http-metrics
+              scheme: HTTP
+            initialDelaySeconds: 45
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: loki
+          ports:
+          - containerPort: 3100
+            name: http-metrics
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ready
+              port: http-metrics
+              scheme: HTTP
+            initialDelaySeconds: 45
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources: {}
+          securityContext:
+            readOnlyRootFilesystem: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /etc/loki
+            name: config
+          - mountPath: /data
+            name: storage
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: default
+        serviceAccountName: default
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: config
+          secret:
+            defaultMode: 420
+            secretName: markwalle-loki
+        - emptyDir: {}
+          name: storage
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""
